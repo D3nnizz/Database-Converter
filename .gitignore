@@ -1,0 +1,17 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Generated output files
+*.xlsx
+*.csv
+
+# Google Sheets credentials (optional, for advanced usage)
+credentials.json
