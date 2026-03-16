@@ -26,45 +26,57 @@ uv pip install -e .
 
 ## Usage
 
-### Windows GUI (simple file picker)
+### Quick start (Python)
 
-Run without arguments to open a file dialog:
+1. Install dependencies:
+
+```bash
+pip install -e .
+```
+
+2. Start the app in GUI mode:
 
 ```bash
 python main.py
 ```
 
-Or force GUI mode explicitly:
+3. In the app dialogs:
+- Select your SQLite database (`.db`, `.sqlite`, `.sqlite3`)
+- Choose where to save the Excel file (`.xlsx`)
 
-```bash
-python main.py --gui
-```
+### Command line usage
 
-The app will:
-1. Ask you to select a SQLite database file
-2. Ask where to save the converted Excel file
-
-Basic usage:
+Convert using command line (no dialogs):
 
 ```bash
 python main.py path/to/database.db
 ```
 
-Specify custom output file:
+Convert and choose output path:
 
 ```bash
 python main.py path/to/database.db -o output.xlsx
 ```
 
-### Example
-
-Convert the example database:
+Force GUI explicitly:
 
 ```bash
-python main.py example/trades.db
+python main.py --gui
 ```
 
-This creates `trades.xlsx` with one sheet per table.
+### Example
+
+```bash
+python main.py example/trades.db -o example/trades.xlsx
+```
+
+### Use without Python (Windows .exe)
+
+After building, run:
+
+`dist/DatabaseConverter.exe`
+
+The `.exe` opens the same file picker workflow and creates the Excel file you choose.
 
 ## Using with Google Sheets
 
@@ -86,6 +98,47 @@ If you prefer to upload directly to Google Sheets via API (more complex, require
 
 - Python >= 3.13
 - SQLite database file
+
+## Build Native Windows Executable (.exe)
+
+Install PyInstaller once:
+
+```bash
+pip install pyinstaller
+```
+
+Build executable:
+
+```powershell
+./build_exe.ps1
+```
+
+Output file:
+
+`dist/DatabaseConverter.exe`
+
+You can run that `.exe` directly on Windows to use the file picker interface.
+
+Customize app identity:
+
+- Icon file: `assets/DatabaseConverter.ico`
+- Version metadata: `version_info.txt`
+
+Edit `version_info.txt` to change product name, company, and version shown in Windows file properties.
+
+## Build Release ZIP
+
+Create a distributable versioned ZIP (builds EXE first, then zips it):
+
+```powershell
+./build_release.ps1
+```
+
+Output example:
+
+`dist/DatabaseConverter-v1.0.0.0-win64.zip`
+
+The ZIP version is read from `ProductVersion` in `version_info.txt`.
 
 ## License
 
