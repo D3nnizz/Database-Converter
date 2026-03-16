@@ -2,6 +2,8 @@ import sqlite3
 import argparse
 from pathlib import Path
 from openpyxl import Workbook
+import tkinter as tk
+from tkinter import filedialog, messagebox
 
 
 def sqlite_to_excel(db_path, output_file=None):
@@ -71,23 +73,73 @@ def sqlite_to_excel(db_path, output_file=None):
     print("3. Double-click to open with Google Sheets")
 
 
+def run_gui():
+    """Run a minimal Windows-friendly GUI for database conversion."""
+    root = tk.Tk()
+    root.withdraw()
+
+    db_path = filedialog.askopenfilename(
+        title="Select SQLite Database",
+        filetypes=[
+            ("SQLite databases", "*.db *.sqlite *.sqlite3"),
+            ("All files", "*.*"),
+        ],
+    )
+
+    if not db_path:
+        return
+
+    default_name = f"{Path(db_path).stem}.xlsx"
+    output_file = filedialog.asksaveasfilename(
+        title="Save Excel File As",
+        defaultextension=".xlsx",
+        initialfile=default_name,
+        filetypes=[("Excel Workbook", "*.xlsx")],
+    )
+
+    if not output_file:
+        return
+
+    try:
+        sqlite_to_excel(db_path, output_file)
+        messagebox.showinfo(
+            title="Conversion Complete",
+            message=f"Excel file created:\n{output_file}",
+        )
+    except Exception as exc:
+        messagebox.showerror(
+            title="Conversion Failed",
+            message=f"An error occurred while converting the database:\n{exc}",
+        )
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='Convert SQLite database to Excel file with one sheet per table.'
     )
     parser.add_argument(
         'database',
+        nargs='?',
         type=str,
-        help='Path to SQLite database file'
+        help='Path to SQLite database file (omit to open GUI)'
     )
     parser.add_argument(
         '-o', '--output',
         type=str,
         help='Output Excel file path (default: database_name.xlsx)'
     )
+    parser.add_argument(
+        '--gui',
+        action='store_true',
+        help='Open the file picker GUI'
+    )
     
     args = parser.parse_args()
     
+    if args.gui or not args.database:
+        run_gui()
+        return
+
     # Validate database file exists
     if not Path(args.database).exists():
         print(f"Error: Database file not found: {args.database}")

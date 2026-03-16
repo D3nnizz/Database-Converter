@@ -26,6 +26,24 @@ uv pip install -e .
 
 ## Usage
 
+### Windows GUI (simple file picker)
+
+Run without arguments to open a file dialog:
+
+```bash
+python main.py
+```
+
+Or force GUI mode explicitly:
+
+```bash
+python main.py --gui
+```
+
+The app will:
+1. Ask you to select a SQLite database file
+2. Ask where to save the converted Excel file
+
 Basic usage:
 
 ```bash
